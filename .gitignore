@@ -1,0 +1,14 @@
+# Node.js bağımlılıkları
+node_modules/
+
+# Çevre değişkenleri
+.env
+
+# Docker volume'leri
+mongo-data/
+
+# Log dosyaları
+*.log
+
+# Sistem dosyaları
+.DS_Store
