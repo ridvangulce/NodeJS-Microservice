@@ -3,23 +3,23 @@ version: '3.8'
 services:
   user-service:
     build:
-      context: ./user-service  # user-service'in Dockerfile'ının bulunduğu dizin
+      context: ./user-service
     ports:
-      - "5001:5001"            # user-service'in port yönlendirmesi
+      - "5001:5001"
     environment:
-      - MONGO_URI=mongodb+srv://admin:admin123@cluster0.w5dyn.mongodb.net/user-service?retryWrites=true&w=majority&appName=Cluster0
-      - JWT_SECRET=QmM1fT5k@xP8!oQ#X2$9k7wS*1z^vTnR
-      - PORT=5001
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - PORT=${PORT}
     depends_on:
-      - mongodb                # user-service başlamadan önce mongodb başlar
+      - mongodb
 
   mongodb:
-    image: mongo:4.4           # MongoDB resmi Docker imajı
-    container_name: mongodb    # Konteyner adı
+    image: mongo:4.4
+    container_name: mongodb
     ports:
-      - "27017:27017"          # MongoDB için port yönlendirmesi
+      - "27017:27017"
     volumes:
-      - mongo-data:/data/db    # MongoDB verilerini saklamak için volume
+      - mongo-data:/data/db
 
 volumes:
-  mongo-data:                  # MongoDB veri deposu
+  mongo-data:
