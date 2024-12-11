@@ -19,7 +19,7 @@ router.get('/profile', authMiddleware, getUserProfile);
 
 router.post("/", validationMiddleware(userValidationSchema), createUser);
 
-router.get("/", getUsers);
+// router.get("/all-users", getUsers);
 
 router.get("/:id", getUserById);
 

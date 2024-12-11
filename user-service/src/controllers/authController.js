@@ -45,5 +45,21 @@ const loginUser = async (req, res) => {
   }
 };
 
+const logoutUser = async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(400).json({ message: "Token is required for logout" });
+    }
+    const token = authHeader.split(" ")[1];
 
-module.exports = { loginUser };
+    // Redis kullanıyorsanız, burada kara listeye ekleyebilirsiniz:
+    // await redisClient.setex(token, 'blacklisted', process.env.JWT_EXPIRY);
+    res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    console.error("Logout error:", error.message);
+    res.status(500).json({ message: "Server error during logout" });
+  }
+};
+
+module.exports = { loginUser, logoutUser };

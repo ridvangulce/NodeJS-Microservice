@@ -13,7 +13,7 @@ app.use(
   })
 );
 
-app.use("/api/users", userRoutes);
+app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
