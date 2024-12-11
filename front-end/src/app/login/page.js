@@ -1,50 +1,51 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { loginUser } from "../../../lib/api";
+import { useState } from 'react';
+import API from '../../../lib/api';
+import { useRouter } from 'next/navigation';
+import withNoAuth from '../../../lib/withNoAuth';
 
 const LoginPage = () => {
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async () => {
     try {
-      const data = await loginUser({ login, password });
-      setMessage("Giriş başarılı!");
-      localStorage.setItem("token", data.token); // JWT'yi localStorage'da sakla
-      router.push("/users"); // Başarılı giriş sonrası kullanıcı listesine yönlendir
+      const response = await API.post('/api/auth/login', { login, password });
+      localStorage.setItem('token', response.data.token);
+      alert('Başarıyla giriş yapıldı!');
+      router.push('/profile'); // Başarılı giriş sonrası profile yönlendir
     } catch (error) {
-      setMessage("Giriş başarısız! Lütfen bilgilerinizi kontrol edin.");
+      console.error('Giriş hatası:', error.response?.data || error.message);
+      alert('Giriş başarısız.');
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleLogin();
     }
   };
 
   return (
-    <div>
+    <div onKeyDown={handleKeyDown} tabIndex="0">
       <h1>Giriş Yap</h1>
-      <form onSubmit={handleLogin}>
-        <input
-          type="login"
-          placeholder="login"
-          value={login}
-          onChange={(e) => setLogin(e.target.value)}
-          autoComplete="current-login" // Buraya eklendi
-        />
-        <input
-          type="password"
-          placeholder="Şifre"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          autoComplete="current-password" // Buraya eklendi
-        />
-        <button type="submit">Giriş Yap</button>
-      </form>
-      <p>{message}</p>
+      <input
+        type="text"
+        placeholder="Email veya Kullanıcı Adı"
+        value={login}
+        onChange={(e) => setLogin(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Şifre"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button onClick={handleLogin}>Giriş Yap</button>
     </div>
   );
 };
 
-export default LoginPage;
+export default withNoAuth(LoginPage);
