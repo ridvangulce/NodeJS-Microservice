@@ -3,58 +3,55 @@
 import { useEffect, useState } from "react";
 import API from "../../../lib/api";
 import withAuth from "../../../lib/withAuth";
-import LogoutButton from "@/components/LogOutButton";
+import { toast } from "react-toastify";
+
 const ProfilePage = () => {
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("Token eksik. Giriş yapmanız gerekiyor."); // Eksik token
-        setError("Token eksik.");
-        return;
-      }
-
       try {
-        console.log("Token ile profil isteği gönderiliyor:", token);
+        const token = localStorage.getItem("token");
         const response = await API.get("/api/user/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
-        console.log("Profil yanıtı:", response.data); // API yanıtını logla
-        setProfile(response.data);
-      } catch (err) {
-        console.error(
-          "Profil isteği hatası:",
-          err.response?.data || err.message
-        ); // API hatasını logla
-        setError("Profil bilgileri alınamadı.");
-      } finally {
-        setLoading(false);
+        setUser(response.data);
+      } catch (error) {
+        console.error("Profil isteği hatası:", error.response?.data || error.message);
+        toast.error("Profil bilgileri alınamadı. Lütfen tekrar deneyin!");
       }
     };
 
     fetchProfile();
   }, []);
 
-  if (loading) return <p>Yükleniyor...</p>;
-  if (error) return <p>{error}</p>;
+  if (!user) {
+    return <p>Yükleniyor...</p>;
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    toast.success("Başarıyla çıkış yapıldı!");
+    window.location.href = "/login";
+  };
 
   return (
-    <div>
-      <h1>Profil</h1>
-      {profile && (
-        <ul>
-          <li>Ad Soyad: {profile.nameSurname}</li>
-          <li>Email: {profile.email}</li>
-          <li>Kullanıcı Adı: {profile.username}</li>
-        </ul>
-      )}
-      <LogoutButton />
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
+        <h1 className="text-2xl font-semibold mb-4 text-center">Kullanıcı Profili</h1>
+        <p className="mb-2">
+          <strong>Ad Soyad:</strong> {user.nameSurname}
+        </p>
+        <p className="mb-2">
+          <strong>Email:</strong> {user.email}
+        </p>
+        <button
+          onClick={handleLogout}
+          className="w-full bg-red-500 text-white py-3 rounded-md hover:bg-red-600 transition"
+        >
+          Çıkış Yap
+        </button>
+      </div>
     </div>
   );
 };
