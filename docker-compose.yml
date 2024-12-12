@@ -28,8 +28,12 @@ services:
     image: ridvangulce/front-end:latest
     ports:
       - "3000:3000"
+    volumes:
+      - ./front-end:/app # Yerel dosyaları Docker içine eşler
+      - /app/node_modules # node_modules değişikliğe uğramasın
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
+    command: npm run dev # Geliştirme komutunu çalıştırır
     depends_on:
       - user-service
 
