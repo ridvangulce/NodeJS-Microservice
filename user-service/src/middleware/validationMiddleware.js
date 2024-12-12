@@ -3,9 +3,8 @@ const validationMiddleware = (schema) => {
     const { error } = schema.validate(req.body, { abortEarly: false });
 
     if (error) {
-      return res.status(400).json({
-        errors: error.details.map((err) => err.message), // Tüm hata mesajlarını döndür
-      });
+      const errors = error.details.map((err) => err.message);
+      return res.status(400).json({ errors });
     }
 
     next();

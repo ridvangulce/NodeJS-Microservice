@@ -2,16 +2,15 @@ const Joi = require("joi");
 
 const userValidationSchema = Joi.object({
   nameSurname: Joi.string()
-    .pattern(/^[A-Za-z]+ [A-Za-z]+$/) // Sadece iki kelime, harflerden oluşmalı
+    .pattern(/^[A-Za-z]+ [A-Za-z]+$/) // En az iki kelime, harflerden oluşmalı
     .min(3)
     .max(50)
     .required()
     .messages({
       "string.empty": "Name is required",
       "string.min": "Name must be at least 3 characters long",
-      "string.max": "Name must be less than 3 characters long",
-      "string.pattern.base":
-        "Name and surname must consist of two words separated by a space, containing only letters",
+      "string.max": "Name must be less than 50 characters long",
+      "string.pattern.base": "Name must consist of at least two words separated by a space, containing only letters",
     }),
   username: Joi.string()
     .pattern(/^[a-zA-Z0-9]+$/) // Sadece harfler ve rakamlar, boşluk ve özel karakter yok
