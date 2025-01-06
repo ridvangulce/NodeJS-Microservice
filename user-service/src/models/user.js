@@ -8,6 +8,17 @@ const userSchema = new mongoose.Schema(
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    role: {
+      type: String,
+      enum: ["admin", "user"], // Sadece 'admin' veya 'user' değerlerini kabul eder
+      default: "user", // Varsayılan olarak 'user'
+    },
+    permissionLevel: {
+      type: Number,
+      min: 1, // Minimum yetki seviyesi
+      max: 10, // Maksimum yetki seviyesi
+      default: 1, // Varsayılan yetki seviyesi
+    },
   },
   { timestamps: true }
 );

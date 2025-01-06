@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const userValidationSchema = Joi.object({
   nameSurname: Joi.string()
-    .pattern(/^[A-Za-z]+ [A-Za-z]+$/) // En az iki kelime, harflerden oluşmalı
+  .pattern(/^[A-Za-zÇçĞğİıÖöŞşÜü]+ [A-Za-zÇçĞğİıÖöŞşÜü]+$/)
     .min(3)
     .max(50)
     .required()
@@ -29,7 +29,7 @@ const userValidationSchema = Joi.object({
     "string.email": "Invalid email format",
   }),
   password: Joi.string()
-    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/) // En az bir büyük, bir küçük harf ve bir sayı
+  .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d*@#&!$%^]{6,}$/)
     .required()
     .messages({
       "string.empty": "Password is required",

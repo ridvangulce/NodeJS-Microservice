@@ -17,7 +17,6 @@ const ProfilePage = () => {
         });
         setUser(response.data);
       } catch (error) {
-        console.error("Profil isteği hatası:", error.response?.data || error.message);
         toast.error("Profil bilgileri alınamadı. Lütfen tekrar deneyin!");
       }
     };

@@ -20,7 +20,6 @@ const LoginPage = () => {
       toast.success("Başarıyla giriş yapıldı!");
       router.push("/profile");
     } catch (error) {
-      console.error("Giriş hatası:", error.response?.data || error.message);
       toast.error(
         error.response?.data?.message || "Giriş başarısız, tekrar deneyin!"
       );

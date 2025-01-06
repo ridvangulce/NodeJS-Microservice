@@ -84,11 +84,8 @@ const deleteUser = async (req, res) => {
 };
 
 const getUserProfile = async (req, res) => {
-  console.log("User Profile Controller Triggered"); // Controller tetikleniyor mu?
 
   try {
-    console.log("req.user:", req.user); // req.user içeriğini kontrol et
-
     // ObjectId formatını doğrula
     if (!mongoose.Types.ObjectId.isValid(req.user.id)) {
       console.log("Invalid user ID format"); // Geçersiz ID formatını logla
