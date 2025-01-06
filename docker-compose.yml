@@ -8,9 +8,22 @@ services:
     ports:
       - "5001:5001"
     environment:
-      - MONGO_URI=${MONGO_URI}
+      - MONGO_URI=${MONGO_URI_USER_SERVICE}
       - JWT_SECRET=${JWT_SECRET}
-      - PORT=${PORT}
+      - PORT=5001
+    depends_on:
+      - mongodb
+
+  admin-service:
+    build:
+      context: ./admin-service
+    image: ridvangulce/admin-service:latest
+    ports:
+      - "5002:5002"
+    environment:
+      - MONGO_URI=${MONGO_URI_ADMIN_SERVICE}
+      - JWT_SECRET=${JWT_SECRET}
+      - PORT=5002
     depends_on:
       - mongodb
 
@@ -21,21 +34,6 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
-
-  front-end:
-    build:
-      context: ./front-end
-    image: ridvangulce/front-end:latest
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./front-end:/app # Yerel dosyaları Docker içine eşler
-      - /app/node_modules # node_modules değişikliğe uğramasın
-    environment:
-      - NODE_ENV=development
-    command: npm run dev # Geliştirme komutunu çalıştırır
-    depends_on:
-      - user-service
 
 volumes:
   mongo-data:
